@@ -10,7 +10,7 @@
         <nav class="navbar">
           <!-- LOGO -->
           <div class="logo">
-            <img src="images/logo.png" alt="" class="logo-img" />
+            <img src="logo.png" alt="" class="logo-img" />
           </div>
 
           <!-- NAVIGATION MENU -->
@@ -21,18 +21,14 @@
                 <!-- cart button -->
                 <li>
                     <!-- enabling checkout button if cart has more than 1 item -->
-                    <button
-                    id="cart-link-btn"
-                    v-on:click="showCheckoutPage"
-                    v-if="cartItemCount >= 1"
-                    >
-                    <i
-                        class="fa fa-shopping-cart"
-                        aria-hidden="true"
-                        style="color: black"
-                    ></i>
-                    {{ cartItemCount }}
-                    </button>
+                   <button id="cart-link-btn" v-on:click="showCheckoutPage" v-if="cartItemCount >= 1">
+                  <i
+                    class="fa fa-shopping-cart"
+                    aria-hidden="true"
+                    style="color: black"
+                  ></i>
+                  {{ cartItemCount }}
+                </button>
 
                     <!-- button disabled if no items in cart -->
                     <button id="cart-link-btn" disabled="disabled" v-else>
@@ -45,36 +41,34 @@
       </header>
       <!----------------- HEADER- NAVBAR ENDS------------->
     <main>
-     <product-list @addProduct="addToCart"></product-list>
+      <div class="main-div" v-if="showLessons">
+        <!-- school banner -->
+          <div class="banner">
+            <div class="hero-text">
+              <h1 style="font-size: 70px">After School Activities Club</h1>
+              <p style="width:50%; text-align:center; margin:auto; line-height: 1.8;">
+                After school activities are some organized activities students
+                could participate after a traditional school day. A large number
+                of students would like to join one or more extracurricular
+                activities.
+              </p>
+            </div>
+          </div>
+          <h1>Club Activities</h1>
+          
+             <product-list :lessons="lessons" @addProduct="addToCart"></product-list>
+      </div>
      
-      <checkout :cart="cart"></checkout>
+      <checkout :cart="cart" v-else></checkout>
     </main>
-    <!-------------------FOOTER START----------------->
-      <footer class="footer-basic">
-        <!---------- SOCIAL MEDIA-------- -->
-        <div class="social">
-          <a href="#"><i class="bi bi-twitter"></i></a
-          ><a href="#"><i class="bi bi-instagram"></i></a
-          ><a href="#"><i class="bi bi-facebook"></i></a
-          ><a href="#"><i class="bi bi-envelope"></i></a>
-        </div>
-
-        <!------------footer sefvices -->
-        <ul class="list-inline">
-          <li class="list-inline-item"><a href="#">Home</a></li>
-          <li class="list-inline-item"><a href="#">Services</a></li>
-          <li class="list-inline-item"><a href="#">About</a></li>
-          <li class="list-inline-item"><a href="#">Terms</a></li>
-          <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
-        </ul>
-        <p class="copyright" style="color: white;">Company Name © 2022</p>
-      </footer>
+    
   </div>
 </template>
 
 <script>
 import productList from "./components/ProductList.vue";
 import checkout from "./components/Form.vue";
+// import { startServer } from './server';
 
 export default {
   name: "App",
@@ -86,15 +80,35 @@ export default {
     return {
       sitename: "Vue.js Pet Depot",
       cart: [],
+      lessons:[],
+      showLessons: true,
     };
   },
+ mounted() {
+  fetch("http://localhost:3000/collection/lessons").then((response) => {
+    response.json().then((json) => {
+      this.lessons = json;
+      console.log(this.lessons);
+      alert(json);
+      console.log(json);
+    });
+  });
+},
   methods: {
-    showCheckout() {},
+    showCheckoutPage(){             
+        this.showLessons = this.showLessons ? false : true;
+    },
     addToCart(product) {
      console.log("addProduct event received by the root component.");
       this.cart.push(product);
     },
     
+  },
+  computed: {
+    //function to return cart length                
+    cartItemCount(){
+        return this.cart.length || '';
+    }
   },
 };
 </script>
