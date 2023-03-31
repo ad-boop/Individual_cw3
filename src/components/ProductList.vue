@@ -98,7 +98,7 @@
                         <!-- if there are 0 spaces left -->
                         <span v-if="lesson.space === 0">All out!</span>
                         <!-- if there are 2 or less spaces than that -->
-                        <span v-if ="lesson.space < 5 && lesson.space > 0">
+                        <span v-else-if ="lesson.space < 5 && lesson.space > 0">
                             Only {{lesson.space}} left!
                         </span>
                         <!-- if there are sufficient spaces -->
