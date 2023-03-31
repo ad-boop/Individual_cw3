@@ -56,10 +56,17 @@
           </div>
           <h1>Club Activities</h1>
           
-             <product-list :lessons="lessons" @addProduct="addToCart"></product-list>
+             <product-list :lessons="lessons" @addLesson="addToCart"></product-list>
       </div>
      
-      <checkout :cart="cart" v-else></checkout>
+      <div v-else>
+        <div class="main-back-to-products">
+                  <button v-on:click = "showCheckoutPage()" class = "goBackBtn">
+                      <span  class="fas fa-arrow-left">Back To Lesson Products</span>
+                  </button>
+        </div>
+        <checkout :cart="cart" @removeLesson="removeFromCart" ></checkout>
+      </div>
     </main>
     
   </div>
@@ -89,7 +96,6 @@ export default {
     response.json().then((json) => {
       this.lessons = json;
       console.log(this.lessons);
-      alert(json);
       console.log(json);
     });
   });
@@ -99,9 +105,22 @@ export default {
         this.showLessons = this.showLessons ? false : true;
     },
     addToCart(product) {
+      product.space -= 1;
      console.log("addProduct event received by the root component.");
       this.cart.push(product);
     },
+    //   remove from cart function
+          removeFromCart(lesson) {
+
+            //increase the spaces by one on the main page
+            lesson.space++;
+            for (let i = 0; i <= this.cart.length; i++) {
+              if (this.cart[i].id === lesson.id) {
+                this.cart.splice(i, 1);
+                break;
+              }
+            }
+          },
     
   },
   computed: {

@@ -25,11 +25,7 @@
 
           </div>
           <!-- If all products are removed from cart, button is displayed to take back to the products page -->
-          <div class="main-back-to-products">
-                <button v-on:click = "showCheckoutPage()" class = "goBackBtn">
-                    <span  class="fas fa-arrow-left">Back To Lesson Products</span>
-                </button>
-            </div>
+          
 
           <!-- ------------- CHECKOUT FORM SECTION------------------------- -->
           <div class="checkout" id="checkout-div">
@@ -82,6 +78,7 @@ export default {
     return {
       name: "",
       phone_number: "",
+      error_message:""
     };
   },
   methods :{
@@ -99,7 +96,7 @@ export default {
             } 
             else{
                 alert("Only letters for the name");
-                this.checkout.error_message="Only letters for the name"
+                this.error_message="Only letters for the name"
             } 
           },
 
@@ -113,7 +110,7 @@ export default {
                 }
                 else{
                     alert("Only numbers for the phone number");
-                    this.checkout.error_message="Only numbers for the phone number"
+                    this.error_message="Only numbers for the phone number"
                 } 
             },
 
@@ -122,7 +119,7 @@ export default {
           submitCheckout() {
 
             // if there are items in the cart
-            if (this.cart.length > 0 && this.checkout.error_message=="") {
+            if (this.cart.length > 0 && this.error_message=="") {
               alert("Order Submitted!");
               location.reload();
             } 
@@ -131,12 +128,12 @@ export default {
               alert("No Lessons in the Cart");
             } 
             // if validation showing incorrect
-            else if(this.checkout.error_message != null){
-              console.log(this.checkout.error_message)
+            else if(this.error_message != null){
+              console.log(this.error_message)
               alert("Fill the form properly")
-              this.checkout.error_message=""
-              this.checkout.name="";
-              this.checkout.phone_number="";
+              this.error_message=""
+              this.name="";
+              this.phone_number="";
             }
            
           },
