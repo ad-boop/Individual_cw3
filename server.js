@@ -7,16 +7,10 @@ var path = require("path");
 var fs = require("fs");
 const { MongoClient } = require("mongodb");
 
-require("dotenv").config()
-
 
 app.use(express.json());
 app.use(cors());
-const ConnectionString = process.env.CONNECTION_STRING;
-const Port = process.env.PORT;
-app.set('port', Port);
-
-
+app.set('port', 3000)
 
 //logger middleware. Logs all the incoming requests
 app.use(function(req, res, next) {
@@ -43,16 +37,12 @@ app.use(function (req, res, next) {
 });
 
 let db;
-// MongoClient.connect(
-//   "mongodb+srv://adora:1234@getting-started.i2rya2y.mongodb.net",
-//   (err, client) => {
-//     db = client.db("schoolPlanner");
-//   }
-// );
-
-MongoClient.connect(ConnectionString, (err, client) => {
-  db = client.db("schoolPlanner");
-  });
+MongoClient.connect(
+  "mongodb+srv://adora:1234@getting-started.i2rya2y.mongodb.net",
+  (err, client) => {
+    db = client.db("schoolPlanner");
+  }
+);
 
 
 app.get('/', (req, res, next) => {
@@ -85,8 +75,7 @@ app.use(function(req, res){
 
 //deploying the server
 // getting port number from heroku
-// const port = process.env.PORT || 3000;
-app.listen(Port, () => {
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
 console.log("Server running...");
 });
-
